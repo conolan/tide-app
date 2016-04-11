@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p id="text"></p>
+<canvas id="myCanvas" width="640" height="524" style="background-image:url('graph_m.png');">
+</canvas>
+
+<script>
+var canvas = document.getElementById('myCanvas'),
+context = canvas.getContext('2d');
+
+
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace(
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;
+	}
+	return vars;
+}
+
+var tide1time=$_GET('tide1time');
+var tide2time=$_GET("tide2time");
+var tide3time=$_GET("tide3time");
+var tide4time=$_GET("tide4time");
+var tide5time=$_GET("tide5time");
+var tide6time=$_GET("tide6time");
+var tide1height=$_GET("tide1height");
+var tide2height=$_GET("tide2height");
+var tide3height=$_GET("tide3height");
+var tide4height=$_GET("tide4height");
+var tide5height=$_GET("tide5height");
+var tide6height=$_GET("tide6height");
+var tidedate=$_GET("tidedate");
+
+tide1time=[tide1time.substr(0,2)-24,tide1time.substr(3,2)];
+tide2time=[tide2time.substr(0,2),tide2time.substr(3,2)];
+tide3time=[tide3time.substr(0,2),tide3time.substr(3,2)];
+tide4time=[tide4time.substr(0,2),tide4time.substr(3,2)];
+//tide5time=[tide5time.substr(0,2),tide5time.substr(3,2)];
+
+if(tide5time==99){
+tide5time=[tide6time.substr(0,2),tide6time.substr(3,2)];
+tide5time[0]=Number(tide6time[0])+24;
+tide5height=tide6height;
+}else{
+tide5time=[tide5time.substr(0,2),tide5time.substr(3,2)];
+tide6time=[tide6time.substr(0,2),tide6time.substr(3,2)];
+tide6time[0]=Number(tide6time[0])+24;
+}
+
+// if(tide6time!=99){
+// tide6time=[tide6time.substr(0,2),tide6time.substr(3,2)];
+// tide6time[0]=Number(tide6time[0])+24;
+// }else{
+// tide5time[0]=Number(tide5time[0])+24;
+// }
+
+var tidetime=[tide1time,tide2time,tide3time,tide4time,tide5time,tide6time];
+var tideheight=[tide1height,tide2height,tide3height,tide4height,tide5height,tide6height];
+
+var tm1=((((tide1time[0]*60)+Number(tide1time[1]))/1440)*578);
+var tm2=((((tide2time[0]*60)+Number(tide2time[1]))/1440)*578);
+var tm3=((((tide3time[0]*60)+Number(tide3time[1]))/1440)*578);
+var tm4=((((tide4time[0]*60)+Number(tide4time[1]))/1440)*578);
+var tm5=((((tide5time[0]*60)+Number(tide5time[1]))/1440)*578);
+var tm6=((((tide6time[0]*60)+Number(tide6time[1]))/1440)*578);
+
+var t1=Math.floor((tm2-tm1)/4);
+var t2=Math.floor((tm3-tm2)/4);
+var t3=Math.floor((tm4-tm3)/4);
+var t4=Math.floor((tm5-tm4)/4);
+var t5=Math.floor((tm6-tm5)/4);
+
+drawLine(t1,0);
+drawLine(t2,1);
+drawLine(t3,2);
+// drawLine(t4,3);
+if(tide5time!=99){
+drawLine(t4,3);
+drawLine(t5,4);
+}
+
+
+function putGraph(){
+	base_image = new Image();
+	base_image.src = 'images/graph_m.png';
+	base_image.onload = function(){
+    context.drawImage(base_image, 1, 1);
+	}
+	}
+
+
+function drawLine(x,y){
+// context.moveTo(32+((tidetime[y][0]*60+tidetime[y][1])/1440)*578,410-(tideheight[y]*80));
+for (i = 0; i < x; i++) {
+
+var tempY = (( (Number(tideheight[y]) + Number(tideheight[y+1]))/2+(Number(tideheight[y])-Number(tideheight[y+1]))/2*Math.cos((3.14/x)*i) )*80);
+if ((32+(i*4)+((Number(tidetime[y][0])*60+Number(tidetime[y][1]))/1440)*578>32)&&(32+(i*4)+((Number(tidetime[y][0])*60+Number(tidetime[y][1]))/1440)*578<611)){
+
+	context.lineTo(32+(i*4)+((Number(tidetime[y][0])*60+Number(tidetime[y][1]))/1440)*578,410-tempY);
+
+}
+
+}
+// context.lineTo(32+((x+1)*4)+((tidetime[y][0]*60+tidetime[y][1])/1440)*578,410-tempY);
+context.lineWidth=4;
+context.stroke();
+
+
+// var dt=<?=$tidedate?>;
+var dt = $_GET('tidedate')
+context.font = "30px Arial";
+context.fillText(dt,190,35);
+}
+</script>

@@ -1,0 +1,11 @@
+{
+  "name": "node-mysql",
+  "version": "0.0.1",
+  "dependencies": {
+    "connect": "^3.4.1",
+    "express": "^4.13.4",
+    "formidable": "^1.0.17",
+    "lodash": "^4.6.1",
+    "mysql": "^2.5.4",
+  }
+}
