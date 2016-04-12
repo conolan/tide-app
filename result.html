@@ -1,0 +1,94 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tide App</title>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script>
+  var pData;
+
+  function getJSON1(theData){
+
+    var myReturnData="";
+
+    for (var key in theData) {
+      if (key=="Date"){
+        myReturnData+="<font color=blue>";
+      }
+      if (key=="LinkB"||key=="LinkC"||key=="LinkD"){
+        myReturnData+=theData[key]+"<br>";
+      }else if (key!="Previous_Search"){
+        myReturnData+=(key.replace(/_/g," ") + ': ' + theData[key]+"<br>");
+      }
+       if (key=="Date"){
+         myReturnData+="</font>";
+       }
+       if (key=="Project"||key=="Dublin_First_Height"||key=="Date"){
+         myReturnData+="<br>";
+       }
+
+
+    }
+    return myReturnData;
+  }
+
+  function getJSON2(theData){
+    pData="<br>"
+    for (var key in theData) {
+
+      if (key=="Previous_Search"){
+        pData+=(key.replace(/_/g," ") + ': ' + theData[key]+"<br>");
+      }
+    }
+    return pData;
+  }
+
+var numTimes=0;
+
+  function getFile(){
+    numTimes++;
+    if (numTimes<11){
+         setTimeout(getFile, 500);
+         $.ajax({
+           url: "/waiting.html",
+           data: {
+           },
+           success: function( data ) {
+             var gotData=getJSON1(data);
+             pData=getJSON2(data);
+             $( "#toppart" ).html(gotData );
+
+             if (gotData.indexOf("waiting")==-1){numTimes=10};
+           }
+         });
+    }else{
+      $(function() {
+
+      $.ajax({
+
+        url: "/calendar.html",
+        data: {
+        },
+        success: function( data ) {
+          $( "#bottompart" ).html( data+pData );
+        }
+      });
+    });
+    }
+  }
+
+setTimeout(getFile, 500);
+  </script>
+
+</head>
+<body>
+
+<div id='toppart'></div>
+<div id='bottompart'></div>
+
+</body>
+</html>

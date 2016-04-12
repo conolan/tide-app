@@ -203,7 +203,7 @@ function processForm(myDate) {
       'timeofAsk': toa,
       'dateofAsk': doa
   },function(err, reply) {
-  console.log("OK"+sCount);});
+  console.log("OK"+sCount);});  
 
     seneca.use(tidePlugin);
     //outData is the JSON written as HTML endpoint waiting.html
