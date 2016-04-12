@@ -6,8 +6,6 @@ var fs = require('fs');
 // var _ = require('lodash');
 var url = require("url");
 var path = require('path');
-var React = require('react');
-var ReactDOM = require('react-dom');
 
 var redis = require("redis");
 var redis_client = redis.createClient();
@@ -203,7 +201,7 @@ function processForm(myDate) {
       'timeofAsk': toa,
       'dateofAsk': doa
   },function(err, reply) {
-  console.log("OK"+sCount);});  
+  console.log("OK"+sCount);});
 
     seneca.use(tidePlugin);
     //outData is the JSON written as HTML endpoint waiting.html
